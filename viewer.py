@@ -29,9 +29,7 @@ def read_threadmap(bytestream, cmap):
         else:
             print(f"unkn {t}")
             tidmap.append([
-                random.randint(0, 255),
-                random.randint(0, 255),
-                random.randint(0, 255)
+                0, 0, 255
             ])
 
     return tidmap
@@ -42,7 +40,7 @@ def read_colormap():
         data = f.read().split("\n")
         for dl in data:
             dcut = list(dl.split(","))
-            colormap[str(int(dcut[0]))] = [int(dcut[i]) for i in [1, 2, 3]]
+            colormap[str(int(dcut[0]))] = [int(dcut[i]) for i in [3, 2, 1]]
     return colormap
 
 ### reading the file ###
@@ -91,6 +89,7 @@ for i in range(imw*imh):
 width = int(outmat.shape[1] * 800 / 100)
 height = int(outmat.shape[0] * 800 / 100)
 resized = cv2.resize(outmat, (width, height), interpolation = cv2.INTER_NEAREST)
+
 cv2.imshow("d", resized)
 while True:
     cv2.waitKey(10)
