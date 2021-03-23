@@ -39,8 +39,12 @@ def read_colormap():
     with open("colormap.txt", "r") as f:
         data = f.read().split("\n")
         for dl in data:
-            dcut = list(dl.split(","))
-            colormap[str(int(dcut[0]))] = [int(dcut[i]) for i in [3, 2, 1]]
+            try:
+                dcut = list(dl.split(","))
+                colormap[str(int(dcut[0]))] = [int(dcut[i]) for i in [3, 2, 1]]
+            except Exception as e:
+                print(f"failed while parsing {dl}")
+                print(e)
     return colormap
 
 ### reading the file ###
