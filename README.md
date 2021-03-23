@@ -1,2 +1,8 @@
 # hkp-viewer
-python3 opencv .hkp file explorer
+Q: What the fuck are .hkp files?
+A: They are proprietary-esque biany files for cross stiching
+
+Q: Why?
+A: Abakan online (using flash) got deprecated and I need to finish my cross stiching
+
+Run using `python3 viewer Wzor.hkp` 
