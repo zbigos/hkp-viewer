@@ -8,7 +8,7 @@ def getquad(bytestream, voidptr):
     btv = [int(k[0]) for k in bts]
     return bts, sum(btv[i]*256**(3-i) for i in [0, 1, 2, 3])
 
-def read_threadmap(bytestream):
+def read_threadmap(bytestream, cmap):
     threadstreams = []
     for i in range(25):
         if bytestream[37 + 24*i] != b'\x04':
@@ -20,19 +20,30 @@ def read_threadmap(bytestream):
         tids.append("".join([chr(ts[i][0]) for i in [1, 2, 3, 4]]))
 
     print(f"using {len(tids)} different threads")
-    for tid in tids:
-        print(tid)
-
     print("injecting shuffled threadmapping")
     tidmap = []
     for t in tids:
-        tidmap.append([
-            random.randint(0, 255),
-            random.randint(0, 255),
-            random.randint(0, 255)
-        ])
+        if t in cmap.keys():
+            print(f"knwn {t}")
+            tidmap.append(cmap[t])
+        else:
+            print(f"unkn {t}")
+            tidmap.append([
+                random.randint(0, 255),
+                random.randint(0, 255),
+                random.randint(0, 255)
+            ])
 
     return tidmap
+
+def read_colormap():
+    colormap = {}
+    with open("colormap.txt", "r") as f:
+        data = f.read().split("\n")
+        for dl in data:
+            dcut = list(dl.split(","))
+            colormap[str(int(dcut[0]))] = [int(dcut[i]) for i in [1, 2, 3]]
+    return colormap
 
 ### reading the file ###
 bytestream = []
@@ -47,7 +58,8 @@ finally:
 
 print(f"read {len(bytestream)} bytes")
 
-threadmapping = read_threadmap(bytestream)
+cmap = read_colormap()
+threadmapping = read_threadmap(bytestream, cmap)
 
 bskip = 0
 for q in range(len(bytestream)):
